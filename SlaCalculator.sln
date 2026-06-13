@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.37301.10 d17.14
+VisualStudioVersion = 17.14.37301.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SlaCalculator", "SlaCalculator", "{099A47E7-98CA-4962-96E8-9D6B6D77E82C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlaCalculator", "src\SlaCalculator\SlaCalculator\SlaCalculator.csproj", "{7D373904-F6B0-4FB3-8747-0EE5D6B9C170}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlaCore", "src\SlaCore\SlaCore.csproj", "{F63C096B-48DF-43B0-9BF3-84C0748B38F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,17 +15,17 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7D373904-F6B0-4FB3-8747-0EE5D6B9C170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D373904-F6B0-4FB3-8747-0EE5D6B9C170}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D373904-F6B0-4FB3-8747-0EE5D6B9C170}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D373904-F6B0-4FB3-8747-0EE5D6B9C170}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F63C096B-48DF-43B0-9BF3-84C0748B38F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F63C096B-48DF-43B0-9BF3-84C0748B38F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F63C096B-48DF-43B0-9BF3-84C0748B38F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F63C096B-48DF-43B0-9BF3-84C0748B38F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{099A47E7-98CA-4962-96E8-9D6B6D77E82C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{7D373904-F6B0-4FB3-8747-0EE5D6B9C170} = {099A47E7-98CA-4962-96E8-9D6B6D77E82C}
+		{F63C096B-48DF-43B0-9BF3-84C0748B38F7} = {099A47E7-98CA-4962-96E8-9D6B6D77E82C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E0A636C4-E968-445B-9BA0-2599C1866C59}

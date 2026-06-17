@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+	  <Authors>Selfmadecode</Authors>
+	  <Description>
+		  A .NET library for SLA deadline calculation. Supports business-hours windows, holiday exclusions, priority tiers,
+		  warning thresholds, and batch metrics.
+	  </Description>
+	  <PackageTags>sla;service-level-agreement;deadline;helpdesk;compliance;business-hours</PackageTags>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
 </Project>

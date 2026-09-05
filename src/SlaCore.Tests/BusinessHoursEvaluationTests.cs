@@ -108,5 +108,77 @@ namespace SlaCore.Tests
 
             Assert.Equal(SlaStatus.OnTrack, result.Status);
         }
+
+        [Fact]
+        public void BusinessHours_Status_Breached_NextDayAfterDeadline()
+        {
+            // The task started on Monday at 09:00 and was evaluated at 14:00.
+            // For a 4-hour task, the elapsed business time is 5 hours, which exceeds the allowed duration.
+            // The status should be Breached.
+            var start = new DateTimeOffset(2024, 1, 15, 9, 0, 0, TimeSpan.Zero);
+            var evaluateAt = new DateTimeOffset(2024, 1, 15, 14, 0, 0, TimeSpan.Zero);
+            var policy = MakePolicy(4);
+
+            var result = SlaCalculator.Evaluate(start, evaluateAt, policy);
+
+            Assert.Equal(SlaStatus.Breached, result.Status);
+        }
+
+        // ── Holiday exclusion
+
+        [Fact]
+        public void BusinessElapsed_HolidayNotCounted()
+        {
+            // Mon 09:00 → Wed 09:00 (Tue is holiday)
+            // Expected: 8h Mon only (Tue excluded, Wed not yet reached at 09:00)
+
+            // The task started on Monday at 09:00 and was evaluated on Wednesday at 09:00.
+            // Tuesday is a holiday, so only Monday's business hours should be counted.
+            // For an 8-hour task, the elapsed business time should be 8 hours.
+            // The policy includes a holiday on Tuesday, January 16, 2024.
+
+            var start = new DateTimeOffset(2024, 1, 15, 9, 0, 0, TimeSpan.Zero); // Mon
+            var holiday = new DateTime(2024, 1, 16); // Tuesday
+            var evaluateAt = new DateTimeOffset(2024, 1, 17, 9, 0, 0, TimeSpan.Zero); // Wed 09:00
+            var policy = new SlaPolicy
+            {
+                Id = "BH",
+                Name = "BH",
+                AllowedDuration = TimeSpan.FromHours(16),
+                UseBusinessHoursOnly = true,
+                Holidays = new[] { holiday }
+            };
+
+            var result = SlaCalculator.Evaluate(start, evaluateAt, policy);
+
+            // Only Monday's 8 hours count (Tuesday skipped, Wednesday not started yet at 09:00)
+            Assert.Equal(TimeSpan.FromHours(8), result.ElapsedTime);
+        }
+
+        // ── Custom business hours
+
+        [Fact]
+        public void CustomBusinessHours_8amTo6pm()
+        {
+            // The task started on Monday at 08:00 and was evaluated at 12:00.
+            // For a 4-hour task, the elapsed business time is 4 hours, which is exactly the allowed duration.
+            var policy = new SlaPolicy
+            {
+                Id = "EH",
+                Name = "ExtendedHours",
+                AllowedDuration = TimeSpan.FromHours(4),
+                UseBusinessHoursOnly = true,
+                BusinessHoursStart = new TimeSpan(8, 0, 0),
+                BusinessHoursEnd = new TimeSpan(18, 0, 0)
+            };
+
+            var start = new DateTimeOffset(2024, 1, 15, 8, 0, 0, TimeSpan.Zero);
+            var evaluateAt = start.AddHours(4);
+
+            var result = SlaCalculator.Evaluate(start, evaluateAt, policy);
+
+            Assert.Equal(TimeSpan.FromHours(4), result.ElapsedTime);
+            Assert.Equal(SlaStatus.Breached, result.Status);
+        }
     }
 }

@@ -1,76 +1,145 @@
-# SlaCalculator
+﻿# SlaCore
 
-SlaCalculator is a .NET library for computing Service Level Agreement (SLA) deadlines
-and evaluating SLA status (on-track, at-risk, breached). It supports both wall-clock and
-business-hours-aware calculations, configurable business days, hours and holidays.
+[SlaCore on NuGet](https://www.nuget.org/packages/SlaCore)
 
-Prerequisites
-- .NET 8 SDK
+SlaCore is a lightweight .NET library for calculating SLA deadlines and evaluating SLA status. It supports wall-clock and business-hours SLAs with features like:
 
-Quick start
+- Predefined priority levels (Critical, High, Medium, Low)
+- Custom SLA durations
+- Configurable business hours and business days
+- Holiday exclusions
+- Warning thresholds and SLA status evaluation
+- Custom business rules
 
-1. Build the solution
+The library targets `netstandard2.0` and can be used from modern .NET applications.
 
-```bash
-dotnet build
+## Installation
+
+Install from NuGet:
+
+```
+dotnet add package SlaCore
 ```
 
-2. Run the example runner project
+Or reference the package in your project file:
 
-```bash
-dotnet run --project src/SlaCore.Runner
+```
+<PackageReference Include="SlaCore" Version="1.0.0" />
 ```
 
-Using the library
+## Quick start
 
-Add a project reference to the `SlaCore` library (from your application project):
+Create a predefined policy and calculate a deadline:
 
-```bash
-dotnet add reference src/SlaCore/SlaCore.csproj
 ```
-
-Sample code
-
-```csharp
-using System;
 using SlaCore;
 using SlaCore.Models;
 
-class Program
-{
-    static void Main()
-    {
-        var started = DateTimeOffset.UtcNow;
-
-        // Use a predefined policy
-        var policy = SlaPolicy.High(); // 4 hours
-
-        // Compute deadline (wall-clock)
-        var deadline = SlaCalculator.CalculateSlaDeadline(started, policy);
-        Console.WriteLine($"Deadline: {deadline}");
-
-        // Evaluate status now
-        var result = SlaCalculator.Evaluate(started, policy);
-        Console.WriteLine(result);
-
-        // Business-hours example
-        var businessPolicy = SlaPolicy.High(businessHoursOnly: true, configure: p =>
-        {
-            p.BusinessHoursStart = TimeSpan.FromHours(9);
-            p.BusinessHoursEnd = TimeSpan.FromHours(17);
-            p.Holidays = new System.Collections.Generic.List<DateTime> { new DateTime(2024, 12, 25) };
-        });
-
-        var businessDeadline = SlaCalculator.CalculateSlaDeadline(started, businessPolicy);
-        Console.WriteLine($"Business-hours deadline: {businessDeadline}");
-    }
-}
+var startedAt = DateTimeOffset.UtcNow;
+var policy = SlaPolicy.High();
+var deadline = SlaCalculator.CalculateSlaDeadline(startedAt, policy);
+Console.WriteLine($"SLA deadline: {deadline}");
 ```
 
-API highlights
-- `SlaPolicy` � create policies with `SlaPolicy.Critical()`, `High()`, `Medium()`, `Low()` and customize
-- `SlaCalculator.CalculateSlaDeadline(startedAt, policy)` � compute deadline
-- `SlaCalculator.Evaluate(startedAt, policy)` � get `SlaResult` with status, elapsed and remaining time
+`SlaPolicy.High()` defaults to a 4-hour allowed duration.
 
-License
-This repository is provided as-is.
+Predefined policies (defaults):
+
+| Policy   | Default duration |
+|---------:|-----------------:|
+| Critical | 1 hour |
+| High     | 4 hours |
+| Medium   | 8 hours |
+| Low      | 24 hours |
+
+## Evaluating SLA status
+
+```
+var result = SlaCalculator.Evaluate(startedAt, policy);
+Console.WriteLine($"Status: {result.Status}");
+Console.WriteLine($"Elapsed: {result.ElapsedTime}");
+Console.WriteLine($"Deadline: {result.Deadline}");
+```
+
+Status values:
+
+- `SlaStatus.OnTrack`
+- `SlaStatus.AtRisk`
+- `SlaStatus.Breached`
+
+By default, `AtRisk` is reached when `WarningThreshold` (0.80) of the allowed duration has elapsed.
+
+## Business rules (wall-clock vs business time)
+
+Set `UseBusinessHoursOnly = true` to apply business-days, business-hours, and holiday rules. When false, SLAs use continuous wall-clock time.
+
+Examples and detailed explanations are available in the `docs/` folder:
+
+- `docs/business-rules.md`
+- `docs/examples.md`
+- `docs/policies.md`
+
+## Real-life scenario: Helpdesk ticket SLA
+
+Scenario:
+
+- A helpdesk creates a ticket at `2026-09-02T16:00` (local time).
+- The customer has a `High` SLA (4 hours) and the team operates Monday–Friday, 09:00–17:00.
+- The next business day is Tuesday at 09:00 (because Monday is a holiday).
+
+Calculation (business hours):
+
+- Day 1: Thursday 16:00 → 17:00 = 1 hour
+- Day 2: Friday is a holiday (0 hours)
+- Weekend: 0 hours
+- Monday: holiday (0 hours)
+- Tuesday 09:00 → 12:00 = 3 hours
+- Deadline: Tuesday 12:00
+
+Code to configure the policy:
+
+```
+var policy = SlaPolicy.High(
+    businessHoursOnly: true,
+    configure: p =>
+    {
+        p.BusinessHoursStart = TimeSpan.FromHours(9);
+        p.BusinessHoursEnd = TimeSpan.FromHours(17);
+        p.BusinessDays = new List<DayOfWeek>
+        {
+            DayOfWeek.Monday,
+            DayOfWeek.Tuesday,
+            DayOfWeek.Wednesday,
+            DayOfWeek.Thursday,
+            DayOfWeek.Friday
+        };
+        p.Holidays = new List<DateTime> { new DateTime(2026, 9, 6), new DateTime(2026, 9, 7) };
+    });
+```
+
+## API overview
+
+Key types:
+
+- `SlaPolicy` — defines allowed duration and business rules (`AllowedDuration`, `UseBusinessHoursOnly`, `BusinessHoursStart`, `BusinessHoursEnd`, `BusinessDays`, `Holidays`, `WarningThreshold`).
+- `SlaCalculator.CalculateSlaDeadline(startedAt, policy)` — computes the deadline.
+- `SlaCalculator.Evaluate(startedAt, policy)` — returns `SlaResult` with `Status`, `Deadline`, `ElapsedTime`.
+
+## Use cases
+
+- Helpdesk and support ticket SLAs
+- Incident management
+- Customer response-time monitoring
+- Internal service requests and compliance tracking
+
+## Development
+
+Build the solution:
+
+```
+dotnet build
+```
+
+## License
+
+MIT — see `LICENSE.txt`.

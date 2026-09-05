@@ -50,6 +50,38 @@ namespace SlaCore.Calculation
             return current;
         }
 
+        /// <summary>
+        /// Calculates business-hours elapsed time between <paramref name="start"/>
+        /// and <paramref name="end"/>.
+        /// </summary>
+        internal static TimeSpan BusinessElapsed(DateTimeOffset start, DateTimeOffset end, SlaPolicy policy)
+        {
+            if (end <= start)
+                return TimeSpan.Zero;
+
+            var elapsed = TimeSpan.Zero;
+            var current = MoveToNextBusinessDateStartTime(start, policy);
+
+            while (current < end)
+            {
+                if (!IsBusinessDay(current, policy))
+                {
+                    current = NextBusinessDayStart(current, policy);
+                    continue;
+                }
+
+                var dayEnd = new DateTimeOffset(
+                    current.Date + policy.BusinessHoursEnd,
+                    current.Offset);
+
+                var segmentEnd = end < dayEnd ? end : dayEnd;
+                elapsed += segmentEnd - current;
+                current = NextBusinessDayStart(current, policy);
+            }
+
+            return elapsed;
+        }
+
 
         // Helper methods to determine business days and hours
         private static DateTimeOffset MoveToNextBusinessDateStartTime(DateTimeOffset dt, SlaPolicy policy)

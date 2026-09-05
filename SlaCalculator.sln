@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SlaCalculator", "SlaCalcula
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlaCore", "src\SlaCore\SlaCore.csproj", "{F63C096B-48DF-43B0-9BF3-84C0748B38F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlaCore.Tests", "src\SlaCore.Tests\SlaCore.Tests.csproj", "{92DE2FA2-C462-42C1-95D1-7A6755C4EC5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{F63C096B-48DF-43B0-9BF3-84C0748B38F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F63C096B-48DF-43B0-9BF3-84C0748B38F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F63C096B-48DF-43B0-9BF3-84C0748B38F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92DE2FA2-C462-42C1-95D1-7A6755C4EC5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92DE2FA2-C462-42C1-95D1-7A6755C4EC5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92DE2FA2-C462-42C1-95D1-7A6755C4EC5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92DE2FA2-C462-42C1-95D1-7A6755C4EC5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -26,6 +32,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{099A47E7-98CA-4962-96E8-9D6B6D77E82C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{F63C096B-48DF-43B0-9BF3-84C0748B38F7} = {099A47E7-98CA-4962-96E8-9D6B6D77E82C}
+		{92DE2FA2-C462-42C1-95D1-7A6755C4EC5B} = {099A47E7-98CA-4962-96E8-9D6B6D77E82C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E0A636C4-E968-445B-9BA0-2599C1866C59}

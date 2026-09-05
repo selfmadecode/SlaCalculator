@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SlaCore.Models
 {
@@ -31,7 +30,7 @@ namespace SlaCore.Models
         /// Gets or sets a value indicating whether only business hours should be considered for the SLA.
         /// </summary>
         public bool UseBusinessHoursOnly { get; set; }
-        // <summary>
+        /// <summary>
         /// Gets or sets the holidays that should be excluded from the SLA calculation.
         /// </summary>
         public IReadOnlyList<DateTime> Holidays { get; set; } = new List<DateTime>();
@@ -61,5 +60,77 @@ namespace SlaCore.Models
         {
             BusinessDays = DefaultBusinessDays;
         }
+
+        private static SlaPolicy Create(string id, string name, TimeSpan allowedDuration,
+            bool businessHoursOnly, Action<SlaPolicy> configure)
+        {
+            var policy = new SlaPolicy
+            {
+                Id = id,
+                Name = name,
+                AllowedDuration = allowedDuration,
+                UseBusinessHoursOnly = businessHoursOnly
+            };
+
+            configure?.Invoke(policy);
+
+            return policy;
+        }
+
+        /// <summary>
+        /// Creates a Critical SLA policy with a default allowed duration of 1 hour.
+        /// </summary>
+        /// <param name="businessHoursOnly">
+        /// Specifies whether the SLA duration should be calculated using business hours only.
+        /// Defaults to <c>false</c>.
+        /// </param>
+        /// <param name="configure">
+        /// An optional callback that can be used to override the default policy settings.
+        /// </param>
+        /// <returns>A configured Critical SLA policy.</returns>
+        public static SlaPolicy Critical(bool businessHoursOnly = false, Action<SlaPolicy> configure = null)
+            => Create("P1", "Critical", TimeSpan.FromHours(1), businessHoursOnly, configure);
+
+        /// <summary>
+        /// Creates a High SLA policy with a default allowed duration of 4 hours.
+        /// </summary>
+        /// <param name="businessHoursOnly">
+        /// Specifies whether the SLA duration should be calculated using business hours only.
+        /// Defaults to <c>false</c>.
+        /// </param>
+        /// <param name="configure">
+        /// An optional callback that can be used to override the default policy settings.
+        /// </param>
+        /// <returns>A configured High SLA policy.</returns>
+        public static SlaPolicy High(bool businessHoursOnly = false, Action<SlaPolicy> configure = null)
+            => Create("P2", "High", TimeSpan.FromHours(4), businessHoursOnly, configure);
+
+        /// <summary>
+        /// Creates a Medium SLA policy with a default allowed duration of 8 hours.
+        /// </summary>
+        /// <param name="businessHoursOnly">
+        /// Specifies whether the SLA duration should be calculated using business hours only.
+        /// Defaults to <c>false</c>.
+        /// </param>
+        /// <param name="configure">
+        /// An optional callback that can be used to override the default policy settings.
+        /// </param>
+        /// <returns>A configured Medium SLA policy.</returns>
+        public static SlaPolicy Medium(bool businessHoursOnly = false, Action<SlaPolicy> configure = null)
+            => Create("P3", "Medium", TimeSpan.FromHours(8), businessHoursOnly, configure);
+
+        /// <summary>
+        /// Creates a Low SLA policy with a default allowed duration of 24 hours.
+        /// </summary>
+        /// <param name="businessHoursOnly">
+        /// Specifies whether the SLA duration should be calculated using business hours only.
+        /// Defaults to <c>false</c>.
+        /// </param>
+        /// <param name="configure">
+        /// An optional callback that can be used to override the default policy settings.
+        /// </param>
+        /// <returns>A configured Low SLA policy.</returns>
+        public static SlaPolicy Low(bool businessHoursOnly = false, Action<SlaPolicy> configure = null)
+            => Create("P4", "Low", TimeSpan.FromHours(24), businessHoursOnly, configure);
     }
 }

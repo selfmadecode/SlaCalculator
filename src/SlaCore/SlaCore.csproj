@@ -3,20 +3,42 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	  <Authors>Selfmadecode</Authors>
-	  <Description>
-		  A .NET library for SLA deadline calculation. Supports business-hours windows, holiday exclusions, priority tiers,
-		  warning thresholds, and batch metrics.
+	  <Company>Selfmadecode</Company>
+	  <Description>A .NET library for SLA deadline calculation. Supports business-hours windows, holiday exclusions, priority tiers, warning thresholds, and batch metrics.
 	  </Description>
-	  <PackageTags>sla;service-level-agreement;deadline;helpdesk;compliance;business-hours</PackageTags>
+	  <PackageTags>sla;service-level-agreement;service-level;sla-calculator;sla-engine;sla-breach;deadline;due-date;deadline-calculator;helpdesk;compliance;business-hours;working-hours;business-time;work-time;business-days;working-days;business-calendar;work-schedule;holidays;public-holidays;holiday-calendar;date-time;date-calculator</PackageTags>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	  <Title>Sla Calculator</Title>
-	  <PackageIcon>icon.png</PackageIcon>
+	  <PackageIcon>icon.jpg</PackageIcon>
 	  <RepositoryUrl>https://github.com/selfmadecode/SlaCalculator</RepositoryUrl>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
+	  <PackageProjectUrl>https://github.com/selfmadecode/SlaCalculator</PackageProjectUrl>
+	  <IncludeSymbols>True</IncludeSymbols>
+	  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	  <EmbedUntrackedSources>true</EmbedUntrackedSources>
+	  <DebugType>portable</DebugType>
+	  <PackageReleaseNotes>Release Notes
+1.0.0
+
+Initial release of the SLA Calculator library.
+
+Features
+SLA deadline calculation
+Business hours support
+Custom business days
+Holiday exclusions
+SLA priority levels
+Configurable warning thresholds
+SLA status evaluation</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\icon.png">
+    <None Include="..\..\icon.jpg">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>

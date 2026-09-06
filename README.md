@@ -75,9 +75,9 @@ Set `UseBusinessHoursOnly = true` to apply business-days, business-hours, and ho
 
 Examples and detailed explanations are available in the `docs/` folder:
 
-- `docs/business-rules.md`
-- `docs/examples.md`
-- `docs/policies.md`
+- [Business rules](docs/business-rules.md)
+- [Examples](docs/examples.md)
+- [Policies](docs/policies.md)
 
 ## Real-life scenario: Helpdesk ticket SLA
 
